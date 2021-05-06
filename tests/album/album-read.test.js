@@ -4,7 +4,7 @@ const request = require('supertest');
 const getDb = require('../../src/services/db');
 const app = require('../../src/app');
 
-describe('read artist', () => {
+describe('read album', () => {
   let db;
   let artists;
 
@@ -83,7 +83,7 @@ describe('read artist', () => {
         expect(res.body).to.deep.equal(albumExpected);
       });
 
-      it('returns a 404 if the artist is not in the database', async () => {
+      it('returns a 404 if the album is not in the database', async () => {
         const res = await request(app).get('/artist/1/album/99999').send();
 
         expect(res.status).to.equal(404);

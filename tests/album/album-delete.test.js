@@ -4,7 +4,7 @@ const request = require('supertest');
 const getDb = require('../../src/services/db');
 const app = require('../../src/app');
 
-describe('update album', () => {
+describe('delete album', () => {
   let db;
   let artists;
 
@@ -55,27 +55,25 @@ describe('update album', () => {
   });
 
   describe('/artist/:artistId/album/:albumId', () => {
-    describe('PATCH', () => {
-      it('updates a single album with the correct id', async () => {
+    describe('DELETE', () => {
+      it('deletes a single Album with the correct id', async () => {
         const artist = artists[0];
         const album = albums[0];
         const res = await request(app)
-          .patch(`/artist/${artist.id}/album/${album.id}`)
-          .send({ name: 'new name', year: '1900' });
+          .delete(`/artist/${artist.id}/album/${album.id}`)
+          .send();
 
         expect(res.status).to.equal(200);
 
         const [
-          [newAlbumRecord],
+          [deletedAlbumRecord],
         ] = await db.query('SELECT * FROM Album WHERE id = ?', [album.id]);
 
-        expect(newAlbumRecord.name).to.equal('new name');
+        expect(!!deletedAlbumRecord).to.be.false;
       });
 
       it('returns a 404 if the album is not in the database', async () => {
-        const res = await request(app)
-          .patch('/artist/1/album/44444')
-          .send({ name: 'new name' });
+        const res = await request(app).delete('/artist/1/album/999999').send();
 
         expect(res.status).to.equal(404);
       });

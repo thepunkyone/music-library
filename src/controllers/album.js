@@ -39,6 +39,7 @@ album
 
     db.close();
   });
+
 album
   .route('/artist/:artistId/album/:albumId')
   .get(async (req, res, next) => {
@@ -77,6 +78,27 @@ album
     } catch (err) {
       next(err);
     }
+    db.close();
+  })
+  .delete(async (req, res, next) => {
+    const { artistId, albumId } = req.params;
+
+    const db = await getDb();
+
+    try {
+      const [
+        { affectedRows },
+      ] = await db.query('DELETE from Album WHERE id = ? AND artistId = ?', [
+        albumId,
+        artistId,
+      ]);
+
+      affectedRows ? res.sendStatus(200) : res.sendStatus(404);
+    } catch (err) {
+      console.log(err);
+      next(err);
+    }
+
     db.close();
   });
 

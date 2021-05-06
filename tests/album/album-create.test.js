@@ -7,12 +7,15 @@ const app = require('../../src/app');
 
 describe('create Album', () => {
   let db;
+  let artists;
+
   beforeEach(async () => {
     db = await getDb();
     artist = await db.query('INSERT into Artist (name, genre) VALUES (?,?)', [
       'Tame Impala',
       'Rock',
     ]);
+    [artists] = await db.query('SELECT * from Artist');
   });
 
   afterEach(async () => {
@@ -24,7 +27,8 @@ describe('create Album', () => {
   describe('/artist/:artistId/album', () => {
     describe('POST', () => {
       it('creates a new album in the database', async () => {
-        const res = await request(app).post('/artist/1/album').send({
+        const artist = artists[0];
+        const res = await request(app).post(`/artist/${artist.id}/album`).send({
           name: 'Currents',
           year: 2015,
         });
