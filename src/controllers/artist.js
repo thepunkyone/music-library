@@ -62,10 +62,28 @@ artist
 
     try {
       const [
-        { changedRows },
+        { affectedRows },
       ] = await db.query('UPDATE Artist SET ? WHERE id = ?', [data, artistId]);
 
-      changedRows ? res.sendStatus(200) : res.sendStatus(404);
+      affectedRows ? res.sendStatus(200) : res.sendStatus(404);
+    } catch (err) {
+      console.log(err);
+      next(err);
+    }
+
+    db.close();
+  })
+  .delete(async (req, res, next) => {
+    const { artistId } = req.params;
+
+    const db = await getDb();
+
+    try {
+      const [
+        { affectedRows },
+      ] = await db.query('DELETE from Artist WHERE id = ?', [artistId]);
+
+      affectedRows ? res.sendStatus(200) : res.sendStatus(404);
     } catch (err) {
       console.log(err);
       next(err);
