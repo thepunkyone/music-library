@@ -2,8 +2,8 @@
 /* eslint-disable no-undef */
 const { expect } = require('chai');
 const request = require('supertest');
-const getDb = require('../src/services/db');
-const app = require('../src/app');
+const getDb = require('../../src/services/db');
+const app = require('../../src/app');
 
 describe('delete artist', () => {
   let db;

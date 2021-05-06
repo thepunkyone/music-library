@@ -5,7 +5,7 @@ const getDb = require('../services/db');
 const artist = express.Router();
 
 artist
-  .route('/')
+  .route('/artist')
   .get(async (req, res, next) => {
     const db = await getDb();
 
@@ -37,7 +37,7 @@ artist
   });
 
 artist
-  .route('/:artistId')
+  .route('/artist/:artistId')
   .get(async (req, res, next) => {
     const { artistId } = req.params;
     const db = await getDb();
