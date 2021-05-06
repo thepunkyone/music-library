@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 const express = require('express');
 const getDb = require('../services/db');
 
@@ -5,7 +6,7 @@ const artist = express.Router();
 
 artist
   .route('/')
-  .get(async (_, res, next) => {
+  .get(async (req, res, next) => {
     const db = await getDb();
 
     try {
@@ -34,4 +35,21 @@ artist
 
     db.close();
   });
+
+artist.route('/:artistId').get(async (req, res, next) => {
+  const { artistId } = req.params;
+  const db = await getDb();
+  try {
+    const [[result]] = await db.query('SELECT * from Artist WHERE id = ?', [
+      artistId,
+    ]);
+
+    result ? res.status(200).send(result) : res.sendStatus(404);
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+  db.close();
+});
+
 module.exports = artist;
