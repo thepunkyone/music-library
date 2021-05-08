@@ -4,6 +4,12 @@ const getDb = require('../services/db');
 
 const artist = express.Router();
 
+// At the moment these controller files contain both the controller and the route
+// The controller logic (the callback that is passed to .get, .post, etc should be extracted
+// into artistController and albumController respectively - see examples /controllers/artistController.js and /routes/artist.js
+// Being able to treat routes and controllers as separate modules reduces unnecessary coupling of logic - the Single Responsibility Principle
+// from SOLID principles.
+
 artist
   .route('/artist')
   .get(async (req, res, next) => {
